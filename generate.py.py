@@ -45,7 +45,7 @@ if not os.path.exists(dir_draw):
     os.makedirs(dir_draw)
 ###################################
 
-dataEA = len(os.walk('VehicleBBox/').next()[2])
+dataEA = len(next(os.walk('VehicleBBox/'))[2])
 
 VIEW_WIDTH = 1920//2
 VIEW_HEIGHT = 1080//2
@@ -54,8 +54,8 @@ VIEW_FOV = 90
 VBB_COLOR = (0, 0, 255)
 WBB_COLOR = (255, 0, 0)
 
-Vehicle_COLOR = np.array([142, 0, 0])
-Walker_COLOR = np.array([60, 20, 220])
+Vehicle_COLOR = (142, 0, 0)
+Walker_COLOR = (60, 20, 220)
 
 rgb_info = np.zeros((VIEW_HEIGHT, VIEW_WIDTH, 3), dtype="i")
 seg_info = np.zeros((VIEW_HEIGHT, VIEW_WIDTH, 3), dtype="i")
@@ -79,15 +79,15 @@ def reading_data(index):
             v_bounding_box_rawdata = fin.read()
 
         v_bounding_box_data = re.findall(r"-?\d+", v_bounding_box_rawdata)
-        v_line_length = len(v_bounding_box_data) / 16 
+        v_line_length = len(v_bounding_box_data) // 16 
 
         v_bbox_data = [[0 for col in range(8)] for row in range(v_line_length)] 
 
-        for i in range(len(v_bounding_box_data)/2):
+        for i in range(len(v_bounding_box_data)//2):
             j = i*2
             v_data.append(tuple((int(v_bounding_box_data[j]), int(v_bounding_box_data[j+1]))))
 
-        for i in range(len(v_bounding_box_data)/16):
+        for i in range(len(v_bounding_box_data)//16):
             for j in range(8):
                 v_bbox_data[i][j] = v_data[k]
                 k += 1
@@ -97,15 +97,15 @@ def reading_data(index):
             w_bounding_box_rawdata = w_fin.read()
 
         w_bounding_box_data = re.findall(r"-?\d+", w_bounding_box_rawdata)
-        w_line_length = len(w_bounding_box_data) / 16 
+        w_line_length = len(w_bounding_box_data) // 16 
 
         w_bb_data = [[0 for col in range(8)] for row in range(w_line_length)] 
 
-        for i in range(len(w_bounding_box_data)/2):
+        for i in range(len(w_bounding_box_data)//2):
             j = i*2
             w_data.append(tuple((int(w_bounding_box_data[j]), int(w_bounding_box_data[j+1]))))
 
-        for i in range(len(w_bounding_box_data)/16):
+        for i in range(len(w_bounding_box_data)//16):
             for j in range(8):
                 w_bb_data[i][j] = w_data[w]
                 w += 1
@@ -141,7 +141,7 @@ def converting(bounding_boxes, line_length):
         points_array.append(tuple((min_x, max_y)))
 
     for i in range(line_length):
-        for j in range(len(points_array)/line_length):
+        for j in range(len(points_array)//line_length):
             bb_4data[i][j] = points_array[k]
             k += 1  
 
@@ -170,7 +170,7 @@ def object_area(data):
                 array_y[j] = 1
             elif array_y[j] >= VIEW_HEIGHT:
                 array_y[j] = VIEW_HEIGHT -1
-       
+
         min_x = min(array_x) 
         max_x = max(array_x) 
         min_y = min(array_y) 
@@ -299,7 +299,7 @@ def processing(img, v_data, w_data, index):
                 array_y[j] = 1
             elif array_y[j] >= VIEW_HEIGHT - 1:
                 array_y[j] = VIEW_HEIGHT - 2
-       
+
         min_x = min(array_x) 
         max_x = max(array_x) 
         min_y = min(array_y) 
@@ -351,7 +351,7 @@ def processing(img, v_data, w_data, index):
                 array_y[j] = 1
             elif array_y[j] >= VIEW_HEIGHT - 1:
                 array_y[j] = VIEW_HEIGHT - 2
-       
+
         min_x = min(array_x) 
         max_x = max(array_x) 
         min_y = min(array_y) 
